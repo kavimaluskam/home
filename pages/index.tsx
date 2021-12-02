@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Grid, GridItem } from "@chakra-ui/react";
 
 import Bio from "../components/Bio";
+
+import LetterboxdRecentMovies from "../components/LetterboxdRecentMovies";
 import SpotifyTopArtists from "../components/SpotifyTopArtists";
 
 const Index: NextPage = () => {
@@ -20,6 +22,9 @@ const Index: NextPage = () => {
     >
       <GridItem colSpan={2}>
         <Bio />
+      </GridItem>
+      <GridItem colSpan={{ md: 1, sm: 2 }}>
+        <LetterboxdRecentMovies />
       </GridItem>
       <GridItem colSpan={{ md: 1, sm: 2 }}>
         <SpotifyTopArtists />
