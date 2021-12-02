@@ -1,4 +1,4 @@
-import { AccessTokenResponse, TopArtistsResponse } from "../types/Spotify";
+import { AccessTokenResponse, Artist } from "../types/Spotify";
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -31,7 +31,7 @@ export const getAccessToken = async (): Promise<AccessTokenResponse> => {
   return response.json();
 };
 
-export const getTopArtists = async (): Promise<TopArtistsResponse> => {
+export const getTopArtists = async (): Promise<Artist[]> => {
   const { access_token } = await getAccessToken();
 
   const response = await fetch(TOP_ARTISTS_ENDPOINT, {
@@ -44,5 +44,14 @@ export const getTopArtists = async (): Promise<TopArtistsResponse> => {
     throw new Error(`${response.status} ${response.statusText}`);
   }
 
-  return response.json();
+  const { items } = await response.json();
+
+  const artists = items.slice(0, 7).map((artist: Artist) => ({
+    name: artist.name,
+    href: artist.external_urls.spotify,
+    avatar: artist.images[0].url,
+    popularity: artist.popularity,
+  }));
+
+  return artists;
 };

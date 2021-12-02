@@ -1,13 +1,7 @@
-import {
-  AspectRatio,
-  Text,
-  Image,
-  Box,
-  LinkOverlay,
-  Tooltip,
-} from "@chakra-ui/react";
-
-import { useLetterboxdRecentMovies } from "../hooks/useLetterboxdRecentMovies";
+import { Text, Box } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
+import Avatar from "./avatar";
+import { RecentMovie } from "../../types/Letterboxd";
 
 const AVATAR_POSITION_ARRAY = [
   { left: "28%", top: "0%", width: "44%", zIndex: 2 },
@@ -15,13 +9,19 @@ const AVATAR_POSITION_ARRAY = [
   { right: "2%", bottom: "3%", width: "44%", transform: "rotate(4deg)" },
 ];
 
-const LetterboxdRecentMovies = () => {
-  const recentMovies = useLetterboxdRecentMovies();
+interface LetterboxdRecentMoviesProps {
+  recentMovies: RecentMovie[];
+}
+
+const LetterboxdRecentMovies = ({
+  recentMovies,
+}: LetterboxdRecentMoviesProps) => {
+  const { t } = useTranslation();
 
   return (
     <Box padding={5} bg="black" borderRadius="lg" pos="relative">
       <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
-        Lately I've watched 🍿
+        {t("LetterboxdRecentMovies.Headline")}
       </Text>
       <Box padding={5} pos="relative" height="0" pb="75%">
         {recentMovies.map((movie, index) => {
@@ -29,11 +29,9 @@ const LetterboxdRecentMovies = () => {
             AVATAR_POSITION_ARRAY[index];
 
           return (
-            <AspectRatio
-              ratio={2 / 3}
+            <Avatar
               key={movie.name}
-              display="inline-block"
-              pos="absolute"
+              movie={movie}
               left={left}
               right={right}
               top={top}
@@ -41,18 +39,7 @@ const LetterboxdRecentMovies = () => {
               width={width}
               zIndex={zIndex}
               transform={transform}
-            >
-              <Tooltip label={movie.name} bg="gray.900" color="gray.50">
-                <LinkOverlay href={movie.href} isExternal={true}>
-                  <Image
-                    alt={movie.name}
-                    src={movie.avatar}
-                    borderRadius={2}
-                    boxSize="100%"
-                  />
-                </LinkOverlay>
-              </Tooltip>
-            </AspectRatio>
+            />
           );
         })}
       </Box>
