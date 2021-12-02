@@ -20,6 +20,9 @@ const Index: NextPage = () => {
       <GridItem colSpan={2}>
         <Bio />
       </GridItem>
+      <GridItem colSpan={{ md: 1, sm: 2 }}>
+        <SpotifyTopArtists />
+      </GridItem>
     </Grid>
   );
 };
