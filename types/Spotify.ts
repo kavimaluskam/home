@@ -1,3 +1,25 @@
+/**
+ * Interfaces for Spotify API Response
+ */
+export interface AccessTokenResponse {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  scope: string;
+}
+export interface TopArtistsResponse {
+  items: Artist[];
+  total: number;
+  limit: number;
+  offset: number;
+  previous?: string;
+  href: string;
+  next?: string;
+}
+
+/**
+ * Interfaces for individual Spotify API Response items
+ */
 export interface ExternalUrls {
   spotify: string;
 }
@@ -26,6 +48,9 @@ export interface Artist {
   uri: string;
 }
 
+/**
+ * Interfaces for internal Spotify items
+ */
 export interface TopArtist {
   name: string;
   avatar: string;

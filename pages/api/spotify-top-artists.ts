@@ -4,8 +4,7 @@ import { Artist } from "../../types/Spotify";
 import { getTopArtists } from "../../lib/Spotify";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const response = await getTopArtists();
-  const { items } = await response.json();
+  const { items } = await getTopArtists();
 
   const artists = items.slice(0, 7).map((artist: Artist) => ({
     name: artist.name,
