@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 
-import { useSpotifyTopArtists } from "../hooks/useTopArtists";
+import { useSpotifyTopArtists } from "../hooks/useSpotifyTopArtists";
 
 const AVATAR_POSITION_ARRAY = [
   { left: "33%", top: "26%", width: "35%" },
