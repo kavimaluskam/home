@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { TopArtist } from "../types/Spotify";
 
 export const useSpotifyTopArtists = (): TopArtist[] => {
-  const [topArtists, setTopArtists] = useState([]);
+  const [topArtists, setTopArtists] = useState<TopArtist[]>([]);
 
   useEffect(() => {
     const fetchTopArtists = async () => {

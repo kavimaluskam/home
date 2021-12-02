@@ -28,9 +28,6 @@ export const getAccessToken = async (): Promise<AccessTokenResponse> => {
     throw new Error(`${response.status} ${response.statusText}`);
   }
 
-  const data = await response.json();
-  console.log(data);
-  return data;
   return response.json();
 };
 
