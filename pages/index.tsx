@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Grid, GridItem } from "@chakra-ui/react";
 
 import Bio from "../components/Bio";
+import SpotifyTopArtists from "../components/SpotifyTopArtists";
 
 const Index: NextPage = () => {
   return (
