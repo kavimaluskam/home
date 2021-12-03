@@ -1,0 +1,8 @@
+{
+  "bio": {
+    "headline": "Hey, I'm Alex Kam 👋",
+    "description": "A big-data plumber 👨🏻‍🔧, a periodically frontend hobbyists 🎨, a slow-paced Web3 learner and hodler 🍵."
+  },
+  "letterboxdRecentMovies": { "headline": "Lately I've watched 🍿" },
+  "spotifyTopArtists": { "headline": "These days I'm listening to 🎧" }
+}

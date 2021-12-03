@@ -1,12 +1,17 @@
-import { Avatar, Heading, HStack, Spacer, Stack } from "@chakra-ui/react";
+import { Avatar, Heading, HStack, Stack, Text } from "@chakra-ui/react";
 
-const Bio = () => {
+interface BioProps {
+  headline: string;
+  description: string;
+}
+
+const Bio = ({ headline, description }: BioProps) => {
   return (
     <HStack padding={5} bg="black" borderRadius="lg" spacing={5}>
-      <Avatar size="xl" name="kavimaluskam" src="https://bit.ly/dan-abramov" />
+      <Avatar size="xl" name="kavimaluskam" src="/avatar.jpeg" />
       <Stack>
-        <Heading fontSize="2xl">Hey, I'm kavimaluskam.eth 👋</Heading>
-        <Heading fontSize="md">I'm a founder, designer, and filmmaker.</Heading>
+        <Heading fontSize="2xl">{headline}</Heading>
+        <Text fontSize="md">{description}</Text>
       </Stack>
     </HStack>
   );
