@@ -1,5 +1,4 @@
 import { Text, Box } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import Avatar from "./avatar";
 import { RecentMovie } from "../../types/Letterboxd";
 
@@ -11,17 +10,17 @@ const AVATAR_POSITION_ARRAY = [
 
 interface LetterboxdRecentMoviesProps {
   recentMovies: RecentMovie[];
+  headline: string;
 }
 
 const LetterboxdRecentMovies = ({
   recentMovies,
+  headline,
 }: LetterboxdRecentMoviesProps) => {
-  const { t } = useTranslation();
-
   return (
     <Box padding={5} bg="black" borderRadius="lg" pos="relative">
       <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
-        {t("LetterboxdRecentMovies.Headline")}
+        {headline}
       </Text>
       <Box padding={5} pos="relative" height="0" pb="75%">
         {recentMovies.map((movie, index) => {

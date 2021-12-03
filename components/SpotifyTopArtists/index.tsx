@@ -1,5 +1,4 @@
 import { Text, Box } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import Avatar from "./avatar";
 import { TopArtist } from "../../types/Spotify";
 
@@ -15,15 +14,17 @@ const AVATAR_POSITION_ARRAY = [
 
 interface SpotifyTopArtistsProps {
   topArtists: TopArtist[];
+  headline: string;
 }
 
-const SpotifyTopArtists = ({ topArtists }: SpotifyTopArtistsProps) => {
-  const { t } = useTranslation();
-
+const SpotifyTopArtists = ({
+  topArtists,
+  headline,
+}: SpotifyTopArtistsProps) => {
   return (
     <Box padding={5} bg="gray.200" borderRadius="lg" pos="relative">
       <Text fontSize="md" color="gray.900" pb="5" textAlign="center">
-        {t("SpotifyTopArtists.Headline")}
+        {headline}
       </Text>
 
       <Box padding={5} pos="relative" height="0" pb="80%">

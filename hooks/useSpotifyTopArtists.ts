@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { TopArtist } from "../types/Spotify";
 
 export const useSpotifyTopArtists = (): TopArtist[] => {
   const [topArtists, setTopArtists] = useState<TopArtist[]>([]);
 
-  useEffect(() => {
+  useMemo(() => {
     const fetchTopArtists = async () => {
+      // TODO: Fix absolute URL
       const response = await fetch("/api/spotify-top-artists/", {
         method: "GET",
       });

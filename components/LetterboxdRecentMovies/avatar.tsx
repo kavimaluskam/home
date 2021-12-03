@@ -1,11 +1,4 @@
-import {
-  AspectRatio,
-  Text,
-  Image,
-  Box,
-  LinkOverlay,
-  Tooltip,
-} from "@chakra-ui/react";
+import { AspectRatio, Image, LinkOverlay, Tooltip } from "@chakra-ui/react";
 import { RecentMovie } from "../../types/Letterboxd";
 
 interface AvatarProps {

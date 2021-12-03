@@ -1,4 +1,4 @@
-import { AccessTokenResponse, Artist } from "../types/Spotify";
+import { AccessTokenResponse, Artist, TopArtist } from "../types/Spotify";
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -31,7 +31,7 @@ export const getAccessToken = async (): Promise<AccessTokenResponse> => {
   return response.json();
 };
 
-export const getTopArtists = async (): Promise<Artist[]> => {
+export const getTopArtists = async (): Promise<TopArtist[]> => {
   const { access_token } = await getAccessToken();
 
   const response = await fetch(TOP_ARTISTS_ENDPOINT, {
