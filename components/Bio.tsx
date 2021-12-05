@@ -4,8 +4,12 @@ import siteMetadata from "../configs/siteMetadata";
 const Bio = () => {
   return (
     <HStack padding={5} bg="black" borderRadius="lg" spacing={5}>
-      <Avatar size="xl" name="kavimaluskam" src="/avatar.jpeg" />
-      <Stack>
+      <Avatar
+        size="xl"
+        name={siteMetadata.bio.name}
+        src={siteMetadata.bio.avatar}
+      />
+      <Stack spacing={2}>
         <Heading fontSize="2xl">{siteMetadata.bio.headline}</Heading>
         {siteMetadata.bio.descriptions.map((description) => (
           <Text fontSize="sm">{description}</Text>
