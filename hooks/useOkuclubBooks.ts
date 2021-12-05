@@ -1,13 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Book } from "../types/Okuclub";
 
 export const useOkuclubBooks = (): Book[] => {
   const [books, setBooks] = useState<Book[]>([]);
 
-  useMemo(() => {
+  useEffect(() => {
     const fetchBooks = async () => {
-      // TODO: Fix absolute URL
-      const response = await fetch("/api/okuclub-books/", {
+      const response = await fetch(`/api/okuclub-books/`, {
         method: "GET",
       });
 

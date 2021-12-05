@@ -1,26 +1,32 @@
-import { Text, Link, Box } from "@chakra-ui/react";
+import { Text, Box } from "@chakra-ui/react";
 import Avatar from "./avatar";
-import { Book } from "../../types/Okuclub";
+import { useOkuclubBooks } from "../../hooks/useOkuclubBooks";
+import siteMetadata from "../../configs/siteMetadata";
 
 const AVATAR_POSITION_ARRAY = [
-  { left: "28%", top: "0%", width: "44%", zIndex: 2 },
-  { left: "2%", bottom: "10%", width: "44%", transform: "rotate(-5deg)" },
-  { right: "2%", bottom: "3%", width: "44%", transform: "rotate(4deg)" },
+  {
+    right: "2%",
+    bottom: "5%",
+    width: "44%",
+    transform: "rotate(5deg)",
+    zIndex: 2,
+  },
+  {
+    left: "28%",
+    bottom: "15%",
+    width: "44%",
+    zIndex: 1,
+  },
+  { left: "2%", top: "5%", width: "44%", transform: "rotate(-5deg)" },
 ];
 
-interface SpotifyTopArtistsProps {
-  readingBooks: Book[];
-  headline: string;
-}
+const OkuclubBooks = () => {
+  const readingBooks = useOkuclubBooks();
 
-const SpotifyTopArtists = ({
-  readingBooks,
-  headline,
-}: SpotifyTopArtistsProps) => {
   return (
     <Box padding={5} bg="black" borderRadius="lg" pos="relative">
       <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
-        Currently I'm Reading 📚
+        {siteMetadata.okuclubBooks.headline}
       </Text>
 
       <Box padding={5} pos="relative" height="0" pb="80%">
@@ -49,4 +55,4 @@ const SpotifyTopArtists = ({
   );
 };
 
-export default SpotifyTopArtists;
+export default OkuclubBooks;
