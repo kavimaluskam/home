@@ -3,9 +3,11 @@
 import { Box } from "@chakra-ui/react";
 
 import Bio from "../components/Bio";
+import Job from "../components/Job";
 import LetterboxdRecentMovies from "../components/LetterboxdRecentMovies";
 import SpotifyTopArtists from "../components/SpotifyTopArtists";
 import OkuclubBooks from "../components/OkuclubBooks";
+import Footer from "../components/Footer";
 
 const Index = () => {
   return (
@@ -17,12 +19,17 @@ const Index = () => {
         right={0}
         bottom={0}
         left={0}
-        zIndex={0}
+        zIndex={-1}
       ></Box>
+
       <Box w="100%" d="inline-block" mb={4}>
         <Bio />
       </Box>
-      <Box sx={{ columnCount: [1, 1, 2], gap: "16px" }}>
+
+      <Box direction="row" sx={{ columnCount: [1, 1, 2], gap: "16px" }}>
+        <Box w="100%" d="inline-block" mb={4}>
+          <Job />
+        </Box>
         <Box w="100%" d="inline-block" mb={4}>
           <LetterboxdRecentMovies />
         </Box>
@@ -33,6 +40,7 @@ const Index = () => {
           <OkuclubBooks />
         </Box>
       </Box>
+      <Footer />
     </Box>
   );
 };
