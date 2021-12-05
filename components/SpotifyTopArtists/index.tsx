@@ -1,6 +1,7 @@
 import { Text, Box } from "@chakra-ui/react";
 import Avatar from "./avatar";
-import { TopArtist } from "../../types/Spotify";
+import { useSpotifyTopArtists } from "../../hooks/useSpotifyTopArtists";
+import siteMetadata from "../../configs/siteMetadata";
 
 const AVATAR_POSITION_ARRAY = [
   { left: "33%", top: "26%", width: "35%" },
@@ -12,19 +13,13 @@ const AVATAR_POSITION_ARRAY = [
   { left: "40%", top: "0%", width: "16%" },
 ];
 
-interface SpotifyTopArtistsProps {
-  topArtists: TopArtist[];
-  headline: string;
-}
+const SpotifyTopArtists = () => {
+  const topArtists = useSpotifyTopArtists();
 
-const SpotifyTopArtists = ({
-  topArtists,
-  headline,
-}: SpotifyTopArtistsProps) => {
   return (
     <Box padding={5} bg="gray.200" borderRadius="lg" pos="relative">
       <Text fontSize="md" color="gray.900" pb="5" textAlign="center">
-        {headline}
+        {siteMetadata.spotifyTopArtists.headline}
       </Text>
 
       <Box padding={5} pos="relative" height="0" pb="80%">

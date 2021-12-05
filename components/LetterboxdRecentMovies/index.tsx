@@ -1,6 +1,7 @@
 import { Text, Box } from "@chakra-ui/react";
 import Avatar from "./avatar";
-import { RecentMovie } from "../../types/Letterboxd";
+import { useLetterboxdRecentMovies } from "../../hooks/useLetterboxdRecentMovies";
+import siteMetadata from "../../configs/siteMetadata";
 
 const AVATAR_POSITION_ARRAY = [
   { left: "28%", top: "0%", width: "44%", zIndex: 2 },
@@ -8,19 +9,13 @@ const AVATAR_POSITION_ARRAY = [
   { right: "2%", bottom: "3%", width: "44%", transform: "rotate(4deg)" },
 ];
 
-interface LetterboxdRecentMoviesProps {
-  recentMovies: RecentMovie[];
-  headline: string;
-}
+const LetterboxdRecentMovies = () => {
+  const recentMovies = useLetterboxdRecentMovies();
 
-const LetterboxdRecentMovies = ({
-  recentMovies,
-  headline,
-}: LetterboxdRecentMoviesProps) => {
   return (
     <Box padding={5} bg="black" borderRadius="lg" pos="relative">
       <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
-        {headline}
+        {siteMetadata.letterboxdRecentMovies.headline}
       </Text>
       <Box padding={5} pos="relative" height="0" pb="75%">
         {recentMovies.map((movie, index) => {

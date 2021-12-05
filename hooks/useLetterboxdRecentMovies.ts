@@ -1,13 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { RecentMovie } from "../types/Letterboxd";
 
 export const useLetterboxdRecentMovies = (): RecentMovie[] => {
   const [recentMovies, setRecentMovies] = useState<RecentMovie[]>([]);
 
-  useMemo(() => {
+  useEffect(() => {
     const fetchRecentMovies = async () => {
-      // TODO: Fix absolute URL
-      const response = await fetch("/api/letterboxd-recent-movies/", {
+      const response = await fetch(`/api/letterboxd-recent-movies/`, {
         method: "GET",
       });
 
