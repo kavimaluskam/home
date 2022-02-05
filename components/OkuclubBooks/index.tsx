@@ -1,4 +1,4 @@
-import { Text, Box } from "@chakra-ui/react";
+import { Box, Link, Text } from "@chakra-ui/react";
 import Avatar from "./avatar";
 import { useOkuclubBooks } from "../../hooks/useOkuclubBooks";
 import siteMetadata from "../../configs/siteMetadata";
@@ -25,9 +25,11 @@ const OkuclubBooks = () => {
 
   return (
     <Box padding={5} bg="black" borderRadius="lg" pos="relative">
-      <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
-        {siteMetadata.okuclubBooks.headline}
-      </Text>
+      <Link href={siteMetadata.okuclubBooks.profile} isExternal={true}>
+        <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
+          {siteMetadata.okuclubBooks.headline}
+        </Text>
+      </Link>
 
       <Box padding={5} pos="relative" height="0" pb="80%">
         {readingBooks &&

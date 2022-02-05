@@ -1,4 +1,4 @@
-import { Text, Box } from "@chakra-ui/react";
+import { Box, Link, Text } from "@chakra-ui/react";
 import Avatar from "./avatar";
 import { useSpotifyTopArtists } from "../../hooks/useSpotifyTopArtists";
 import siteMetadata from "../../configs/siteMetadata";
@@ -18,9 +18,11 @@ const SpotifyTopArtists = () => {
 
   return (
     <Box padding={5} bg="gray.200" borderRadius="lg" pos="relative">
-      <Text fontSize="md" color="gray.900" pb="5" textAlign="center">
-        {siteMetadata.spotifyTopArtists.headline}
-      </Text>
+      <Link href={siteMetadata.spotifyTopArtists.profile} isExternal={true}>
+        <Text fontSize="md" color="gray.900" pb="5" textAlign="center">
+          {siteMetadata.spotifyTopArtists.headline}
+        </Text>
+      </Link>
 
       <Box padding={5} pos="relative" height="0" pb="80%">
         {topArtists &&
