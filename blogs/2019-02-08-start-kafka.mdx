@@ -35,7 +35,7 @@ Apache Kafka consists of six core components, namely:
 
 <div class="Image__Medium">
   <img
-    src="./images/kafka-components.png"
+    src="/blogs/2019-02-08-start-kafka/kafka-components.png"
     alt="Relationship between Kafka Components"
   />
   <figcaption>Relationship between Kafka Components</figcaption>
@@ -103,7 +103,7 @@ much handier than the Kafka Producer API and Kafka Consumer API.
 
 <div class="Image__Medium">
   <img
-    src="./images/kafka-connect.png"
+    src="/blogs/2019-02-08-start-kafka/kafka-connect.png"
     alt="“Same same but different”, Kafka Connect makes stream handling easier."
   />
   <figcaption>
@@ -155,7 +155,7 @@ the file `docker/docker-compose.yml`, which is as follows:
 
 <div class="Image__Medium">
   <img
-    src="./images/local-kafka-docker.png"
+    src="/blogs/2019-02-08-start-kafka/local-kafka-docker.png"
     alt="Components of the local Kafka Cluster"
   />
   <figcaption>Components of the local Kafka Cluster</figcaption>
@@ -198,7 +198,7 @@ docker ps
 ```
 
 <div class="Image__Medium">
-  <img src="./images/docker-ps.png" alt="docker-ps" />
+  <img src="/blogs/2019-02-08-start-kafka/docker-ps.png" alt="docker-ps" />
   <figcaption>
     Output from the command “docker ps” — you can see the Kafka cluster is now
     ready.
@@ -507,7 +507,7 @@ to visualize the Kafka cluster and schema registry.
 for monitoring a Kafka cluster is available at http://localhost:9000.
 
 <div class="Image__Medium">
-  <img src="./images/kafdrop.png" alt="kafdrop" />
+  <img src="/blogs/2019-02-08-start-kafka/kafdrop.png" alt="kafdrop" />
   <figcaption>
     Kafdrop Interface, showing the status of the Kafka cluster.
   </figcaption>
@@ -517,7 +517,10 @@ for monitoring a Kafka cluster is available at http://localhost:9000.
 a web interface for the schema registry, is available at http://localhost:8082.
 
 <div class="Image__Medium">
-  <img src="./images/schema-registry-ui.png" alt="schema-registry-ui" />
+  <img
+    src="/blogs/2019-02-08-start-kafka/schema-registry-ui.png"
+    alt="schema-registry-ui"
+  />
   <figcaption>
     Schema Registry UI, showing the details of available schemas.
   </figcaption>
@@ -543,7 +546,7 @@ but it isn’t a complete demo if it’s just running on our local machine.
 Now, we will deploy the entire architecture to AWS!
 
 <div class="Image__Medium">
-  <img src="./images/sean.jpeg" alt="sean bean" />
+  <img src="/blogs/2019-02-08-start-kafka/sean.jpeg" alt="sean bean" />
   <figcaption>
     Especially when we can sneak into our company's AWS account.
   </figcaption>
@@ -588,12 +591,15 @@ to complete the setup. You may use the below suggested values for the
 required configuration:
 
 <div class="Image__Medium">
-  <img src="./images/vpc.png" alt="vpc" />
+  <img src="/blogs/2019-02-08-start-kafka/vpc.png" alt="vpc" />
   <figcaption>Suggested parameter for creating VPC and subnets</figcaption>
 </div>
 
 <div class="Image__Medium">
-  <img src="./images/vpc-dashboard.png" alt="vpc-dashboard" />
+  <img
+    src="/blogs/2019-02-08-start-kafka/vpc-dashboard.png"
+    alt="vpc-dashboard"
+  />
   <figcaption>
     Created VPC and subnets can be viewed in the VPC dashboard
   </figcaption>
@@ -691,14 +697,14 @@ The deployment may take a few minutes.
 You can check the latest progress in the AWS CloudFormation Dashboard.
 
 <div class="Image__Medium">
-  <img src="./images/cf1.png" alt="cf1" />
+  <img src="/blogs/2019-02-08-start-kafka/cf1.png" alt="cf1" />
   <figcaption>
     CloudFormation dashboard shows deployment stack’s status and details
   </figcaption>
 </div>
 
 <div class="Image__Medium">
-  <img src="./images/cf2.png" alt="cf2" />
+  <img src="/blogs/2019-02-08-start-kafka/cf2.png" alt="cf2" />
   <figcaption>
     CloudFormation dashboard also shows deployment progress and events
   </figcaption>
@@ -737,7 +743,10 @@ We shall see created topics with messages via Kafdrop
 for the production environment.
 
 <div class="Image__Medium">
-  <img src="./images/kafdrop-result.png" alt="kafdrop-result" />
+  <img
+    src="/blogs/2019-02-08-start-kafka/kafdrop-result.png"
+    alt="kafdrop-result"
+  />
   <figcaption>Finally, database records are saved in MSK cluster!</figcaption>
 </div>
 

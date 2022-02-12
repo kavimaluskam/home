@@ -1,6 +1,8 @@
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
+import { serialize } from "next-mdx-remote/serialize";
+
 import { Blog, FrontMatter } from "../types/mdx";
 
 const estimateReadingTime = (text: string) => {
@@ -48,4 +50,20 @@ export const fetchBlogByPath = (filePath: string): Blog => {
     frontMatter,
     filePath,
   };
+};
+
+export const serializeContent = async (content: string) => {
+  const mdxSource = await serialize(content, {
+    // Optionally pass remark/rehype plugins
+    mdxOptions: {
+      remarkPlugins: [
+        import("remark-autolink-headings"),
+        import("remark-slug"),
+        import("remark-code-titles"),
+      ],
+      rehypePlugins: [import("mdx-prism")],
+    },
+  });
+
+  return mdxSource;
 };
