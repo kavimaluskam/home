@@ -1,7 +1,19 @@
-import { Box, Link } from "@chakra-ui/react";
+import { Box, Img, Link } from "@chakra-ui/react";
 
-import Highlight, { defaultProps } from "prism-react-renderer";
 import Layout from "../../components/Layout";
+import {
+  h2,
+  h3,
+  p,
+  a,
+  ol,
+  ul,
+  li,
+  blockquote,
+  pre,
+  img,
+  figcaption,
+} from "../../components/Blogs/Mdx";
 
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import {
@@ -20,41 +32,49 @@ const Blog = ({
 }) => {
   return (
     <Layout>
-      <Box fontSize="18px" lineHeight="1.756">
-        <MDXRemote
-          {...source}
-          components={{
-            h2: (props: any) => (
-              <Box
-                m="4px 0 16px 0"
-                fontSize="3xl"
-                fontWeight="semibold"
-                as="h2"
-                {...props}
-              />
-            ),
-            p: (props: any) => <Box m="4px 0 16px 0" as="p" {...props} />,
-            a: (props: any) => <Link m="0 0 16px 0" {...props} color="pink" />,
-            ol: (props: any) => (
-              <Box m="0 0 16px 0" pl="4" as="ol" {...props} />
-            ),
-            ul: (props: any) => (
-              <Box m="0 0 16px 0" pl="4" as="ul" {...props} />
-            ),
-            li: (props: any) => <Box m="0 0 16px 0" as="li" {...props} />,
-            blockquote: (props: any) => (
-              <Box
-                m="0 0 16px 0"
-                pl="2"
-                borderLeft="4px solid pink"
-                as="blockquote"
-                {...props}
-              />
-            ),
-            // pre: (props: any) => <Highlight {...defaultProps} {...props} />,
-          }}
-        />
-      </Box>
+      <>
+        <Box maxW="600px" mx="auto" mb="4">
+          <Box fontSize="3xl" fontWeight="semibold" mb="2">
+            {frontMatter.title}
+          </Box>
+          <Box as="span" opacity="0.75" fontSize="0.8rem">
+            {frontMatter.date} · {frontMatter.readingTime} min read
+          </Box>
+        </Box>
+        {frontMatter.hero && (
+          <Box mb="4">
+            <Img
+              src={frontMatter.hero}
+              alt={`by ${frontMatter.heroName}`}
+              mb="4"
+            />
+            <Box as="p" opacity="0.75" fontSize="0.8rem" textAlign="center">
+              Photos by{" "}
+              <Link href={frontMatter.heroUrl} isExternal color="orange">
+                {frontMatter.heroName}
+              </Link>
+            </Box>
+          </Box>
+        )}
+        <Box fontSize="1rem" lineHeight="1.5rem" pt="4">
+          <MDXRemote
+            {...source}
+            components={{
+              h2: h2,
+              h3: h3,
+              p: p,
+              a: a,
+              ol: ol,
+              ul: ul,
+              li: li,
+              blockquote: blockquote,
+              pre: pre,
+              img: img,
+              figcaption: figcaption,
+            }}
+          />
+        </Box>
+      </>
     </Layout>
   );
 };

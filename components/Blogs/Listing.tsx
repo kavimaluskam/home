@@ -23,7 +23,7 @@ const BlogListing = ({ frontMatter }: { frontMatter: FrontMatter }) => {
             mr="2"
             borderRadius="lg"
             variant="solid"
-            colorScheme="pink"
+            colorScheme="orange"
             fontSize="0.6rem"
           >
             {tag}
@@ -32,7 +32,7 @@ const BlogListing = ({ frontMatter }: { frontMatter: FrontMatter }) => {
       </Flex>
 
       <NextLink href={`/blogs/${frontMatter.slug}`} passHref>
-        <Link _hover={{ color: "pink" }}>
+        <Link _hover={{ color: "orange" }}>
           {/* <Box> */}
           <Box mt="1" fontSize="2xl" as="h2">
             {frontMatter.title}
@@ -42,7 +42,7 @@ const BlogListing = ({ frontMatter }: { frontMatter: FrontMatter }) => {
             {frontMatter.excerpt}
           </Box>
 
-          <Box mt="4" color="gray.600" fontSize="0.8rem">
+          <Box mt="4" opacity="0.75" fontSize="0.8rem">
             {frontMatter.date} · {frontMatter.readingTime} min read
           </Box>
           {/* </Box> */}
