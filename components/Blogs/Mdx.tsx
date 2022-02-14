@@ -1,4 +1,4 @@
-import { Box, Flex, Img, Link } from "@chakra-ui/react";
+import { Box, Flex, Image, Link } from "@chakra-ui/react";
 
 import Highlight, { defaultProps } from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/vsDark";
@@ -29,39 +29,50 @@ export const blockquote = (props: any) => (
   />
 );
 
-export const pre = (props: any) => (
-  <Highlight
-    {...defaultProps}
-    code={props.children.props.children}
-    language={props.children.props.className.replace("language-", "")}
-    theme={theme}
-  >
-    {({ className, style, tokens, getLineProps, getTokenProps }) => (
-      <Box
-        as="pre"
-        fontSize="0.7rem"
-        p="4"
-        overflow="auto"
-        className={className}
-        style={style}
-      >
-        {tokens.map((line, i) => (
-          <Flex {...getLineProps({ line, key: i })}>
-            <Box as="span" opacity="0.5" pr="1rem">
-              {i + 1}
-            </Box>
-            {line.map((token, key) => (
-              <Box as="span" {...getTokenProps({ token, key })} />
+export const pre = (props: any) => {
+  return (
+    <Highlight
+      {...defaultProps}
+      code={props.children.props.children}
+      language={props.children.props.className.replace("language-", "")}
+      theme={theme}
+    >
+      {({ className, style, tokens, getLineProps, getTokenProps }) => {
+        return (
+          <Box
+            as="pre"
+            fontSize="0.7rem"
+            p="4"
+            overflow="auto"
+            className={className}
+            style={style}
+          >
+            {tokens.map((line, i) => (
+              <Flex {...getLineProps({ line, key: i })}>
+                <Box as="span" opacity="0.5" pr="1rem">
+                  {i + 1}
+                </Box>
+                {line.map((token, key) => (
+                  <Box as="span" {...getTokenProps({ token, key })} />
+                ))}
+              </Flex>
             ))}
-          </Flex>
-        ))}
-      </Box>
-    )}
-  </Highlight>
-);
+          </Box>
+        );
+      }}
+    </Highlight>
+  );
+};
 
 export const img = (props: any) => (
-  <Img mb="4" ml="auto" mr="auto" {...props} maxW="100%" objectFit="contain" />
+  <Image
+    mb="4"
+    ml="auto"
+    mr="auto"
+    {...props}
+    maxW="100%"
+    objectFit="contain"
+  />
 );
 
 export const figcaption = (props: any) => (

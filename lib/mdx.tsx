@@ -3,10 +3,7 @@ import matter from "gray-matter";
 import path from "path";
 import { serialize } from "next-mdx-remote/serialize";
 
-import remarkAutolinkHeadings from "remark-autolink-headings";
-import remarkSlug from "remark-slug";
-
-import { Blog, FrontMatter } from "../types/mdx";
+import { Blog } from "../types/mdx";
 
 const estimateReadingTime = (text: string) => {
   const wordsPerMinute = 200;
@@ -56,14 +53,11 @@ export const fetchBlogByPath = (filePath: string): Blog => {
 };
 
 export const serializeContent = async (content: string) => {
-  const remarkCodeTitles = require("remark-code-titles");
-  const mdxPrism = require("mdx-prism");
-
   const mdxSource = await serialize(content, {
     // Optionally pass remark/rehype plugins
     mdxOptions: {
-      remarkPlugins: [remarkAutolinkHeadings, remarkCodeTitles, remarkSlug],
-      rehypePlugins: [mdxPrism],
+      remarkPlugins: [],
+      rehypePlugins: [],
     },
   });
 
