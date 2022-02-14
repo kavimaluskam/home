@@ -3,7 +3,7 @@ import siteMetadata from "../configs/siteMetadata";
 
 const Job = () => {
   return (
-    <Stack padding={5} bg="orange.600" borderRadius="lg" spacing={5}>
+    <Stack padding={5} bg="orange.500" borderRadius="lg" spacing={5}>
       <Image
         boxSize="150px"
         ml="auto"

@@ -1,7 +1,9 @@
 // blogs.tsx
 
-import { Button } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+
+import Masonry from "react-masonry-component";
 
 import NextLink from "next/link";
 
@@ -14,15 +16,24 @@ const Blogs = ({ blogs }: { blogs: Array<Blog> }) => {
   return (
     <Layout>
       <>
-        <NextLink href="/">
-          <Button leftIcon={<ArrowBackIcon />} variant="ghost" color="gray.500">
-            Home
-          </Button>
-        </NextLink>
-
-        {blogs.map(({ frontMatter }) => (
-          <BlogListing key={frontMatter.slug} frontMatter={frontMatter} />
-        ))}
+        <Box>
+          <NextLink href="/">
+            <Button
+              leftIcon={<ArrowBackIcon />}
+              variant="ghost"
+              color="gray.500"
+            >
+              Home
+            </Button>
+          </NextLink>
+        </Box>
+        <Masonry>
+          {blogs.map(({ frontMatter }) => (
+            <Box w={{ sm: "100%", md: "50%" }} p="2" key={frontMatter.slug}>
+              <BlogListing frontMatter={frontMatter} />
+            </Box>
+          ))}
+        </Masonry>
       </>
     </Layout>
   );

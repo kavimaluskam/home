@@ -6,7 +6,7 @@ import { FrontMatter } from "../../types/mdx";
 
 const BlogListing = ({ frontMatter }: { frontMatter: FrontMatter }) => {
   return (
-    <Box borderWidth="1px" borderRadius="lg" my="4" p="5">
+    <Box my="4" p="5" borderWidth="1px" borderRadius="lg">
       <NextLink href={`/blogs/${frontMatter.slug}`} passHref>
         <Link>
           <Box mb="5" borderRadius="lg">
@@ -33,7 +33,6 @@ const BlogListing = ({ frontMatter }: { frontMatter: FrontMatter }) => {
 
       <NextLink href={`/blogs/${frontMatter.slug}`} passHref>
         <Link _hover={{ color: "orange" }}>
-          {/* <Box> */}
           <Box mt="1" fontSize="2xl" as="h2">
             {frontMatter.title}
           </Box>
@@ -45,7 +44,6 @@ const BlogListing = ({ frontMatter }: { frontMatter: FrontMatter }) => {
           <Box mt="4" opacity="0.75" fontSize="0.8rem">
             {frontMatter.date} · {frontMatter.readingTime} min read
           </Box>
-          {/* </Box> */}
         </Link>
       </NextLink>
     </Box>
