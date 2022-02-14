@@ -3,7 +3,7 @@ import siteMetadata from "../configs/siteMetadata";
 
 const Job = () => {
   return (
-    <Stack padding={5} bg="orange.600" borderRadius="lg" spacing={5}>
+    <Stack padding={5} bg="orange.500" borderRadius="lg" spacing={5}>
       <Image
         boxSize="150px"
         ml="auto"
@@ -11,8 +11,8 @@ const Job = () => {
         alt={siteMetadata.job.company}
         src={siteMetadata.job.avatar}
       />
-      {siteMetadata.job.descriptions.map((description) => (
-        <Text>{description}</Text>
+      {siteMetadata.job.descriptions.map((description, i) => (
+        <Text key={i}>{description}</Text>
       ))}
     </Stack>
   );

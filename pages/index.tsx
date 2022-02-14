@@ -2,47 +2,57 @@
 
 import { Box } from "@chakra-ui/react";
 
+import Masonry from "react-masonry-component";
+
+import Layout from "../components/Layout";
 import Bio from "../components/Bio";
 import Job from "../components/Job";
+import PreviewWidget from "../components/Blogs/PreviewWidget";
 import LetterboxdRecentMovies from "../components/LetterboxdRecentMovies";
 import SpotifyTopArtists from "../components/SpotifyTopArtists";
 import OkuclubBooks from "../components/OkuclubBooks";
-import Footer from "../components/Footer";
 
-const Index = () => {
+import { Blog } from "../types/mdx";
+import { fetchBlogFilePaths, fetchBlogByPath } from "../lib/mdx";
+
+const Index = ({ blogs }: { blogs: Array<Blog> }) => {
   return (
-    <Box maxW={{ sm: "90%", md: "80%", lg: "60%" }} mx="auto" mt={8} px={3}>
-      <Box
-        background="linear-gradient(319deg, rgb(255 51 98 / 8%) 10%, rgb(255 235 0 / 0%) 50%), linear-gradient(20deg, rgb(255 200 0 / 13%) 5%, rgb(255 212 0 / 0%) 40%)"
-        position="fixed"
-        top={0}
-        right={0}
-        bottom={0}
-        left={0}
-        zIndex={-1}
-      ></Box>
+    <Layout>
+      <>
+        <Box w="100%" d="inline-block" p={3}>
+          <Bio />
+        </Box>
 
-      <Box w="100%" d="inline-block" mb={4}>
-        <Bio />
-      </Box>
+        <Masonry>
+          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+            <Job />
+          </Box>
 
-      <Box direction="row" sx={{ columnCount: [1, 1, 2], gap: "16px" }}>
-        <Box w="100%" d="inline-block" mb={4}>
-          <Job />
-        </Box>
-        <Box w="100%" d="inline-block" mb={4}>
-          <LetterboxdRecentMovies />
-        </Box>
-        <Box w="100%" d="inline-block" mb={4}>
-          <SpotifyTopArtists />
-        </Box>
-        <Box w="100%" d="inline-block" mb={4}>
-          <OkuclubBooks />
-        </Box>
-      </Box>
-      <Footer />
-    </Box>
+          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+            <PreviewWidget blogs={blogs} />
+          </Box>
+
+          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+            <LetterboxdRecentMovies />
+          </Box>
+
+          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+            <SpotifyTopArtists />
+          </Box>
+
+          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+            <OkuclubBooks />
+          </Box>
+        </Masonry>
+      </>
+    </Layout>
   );
 };
 
 export default Index;
+
+export const getStaticProps = () => {
+  const blogs = fetchBlogFilePaths().map(fetchBlogByPath);
+
+  return { props: { blogs } };
+};

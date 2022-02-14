@@ -13,6 +13,10 @@ const config = {
       "Different from my previous data platform team experience, Now working on user facing product with Big Table and Go.",
     ],
   },
+  blogs: {
+    headline: "Recently Wrote 📝",
+    blogsButton: "Check out all posts 🔍",
+  },
   letterboxdRecentMovies: {
     headline: "Lately watched 🍿",
     profile: "https://letterboxd.com/kavimaluskam/",

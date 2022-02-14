@@ -1,0 +1,783 @@
+---
+title: Real-time pipeline with Apache Kafka
+date: "2019-02-08"
+hero: /blogs/2019-02-08-start-kafka/hero.jpeg
+heroName: Greg Rosenke
+heroUrl: https://unsplash.com/@greg_rosenke
+excerpt: A Apache Kafka setup guide on your local machine and the new AWS MSK.
+tags:
+  - data engineering
+  - tutorial
+---
+
+For both data engineers and DevOps, setting up a real-time data pipeline
+is no trivial task, yet, such architectures are immensely useful,
+for instance, real-time recommendation engine, real-time geo-location
+visualization.
+
+One of the most commonly used solution for such pipeline is **Apache Kafka**.
+Developed by Linkedin in 2011, Kafka has been slowly growing into a mature
+platform for distributed streaming with good scalability, data persistence,
+fault-tolerance.
+
+Thanks to the announcement of **Amazon Managed Streaming for Kafka**
+(AWS MSK in short) in November last year, setting up a production-grade
+Kafka cluster that on AWS is not as challenging as it used to be.
+In this article, I will go over some of the basics on starting
+a bare-bone Kafka cluster both locally and on AWS cloud.
+
+Firstly, let’s go over some brief overview of the basic components of Kafka.
+
+## Basic Components of Apache Kafka
+
+Apache Kafka consists of six core components, namely:
+**Broker**, **Topic**, **Consumer**, **Producer**, **Connector**, **Streamer**.
+
+<div class="Image__Medium">
+  <img
+    src="/blogs/2019-02-08-start-kafka/kafka-components.png"
+    alt="Relationship between Kafka Components"
+  />
+  <figcaption>Relationship between Kafka Components</figcaption>
+</div>
+
+### Kafka Topic
+
+Kafka topic is a category/grouping for messages, allowing for:
+
+- data partitioning, with an immutable ordered sequence;
+
+- data persistence (retention period is configurable);
+
+- multiple-consumer subscription;
+
+### Kafka Broker
+
+Kafka broker (sometimes referred as Kafka server/node) is the server
+node in the cluster, mainly responsible for:
+
+- hosting partitions of Kafka Topics;
+
+- transferring messages from Kafka Producer to Kafka Consumer;
+
+- providing data replication and partitioning within a Kafka Cluster;
+
+### Kafka Consumer
+
+Kafka consumer subscribes to the broker, and consumes data from a topic.
+It actively **pulls** data from the specified Kafka Topic
+with offset management.
+
+**Kafka consumer group** is a set of consumers consuming data from some topics.
+Each partition in the topic is assigned to exactly one member in the group.
+Changes of consumer group members result in partitions re-assignment
+to consumers.
+
+### Kafka Producer
+
+On the other hand, Kafka producer is responsible for writing data
+to a Kafka topic, in the following ways:
+
+- send message to **a** topic partition, then inform the partition leader;
+
+- allow batching and compressing configuration;
+
+- allow optimization between throughput and data guarantees;
+
+### Kafka Connect
+
+To read from or write to various data sources (e.g. databases,
+distributed storage), rather than writing a producer or consumer for
+each data sources, Apache Kafka provides us a simpler abstraction namely
+**Kafka Connect**.
+
+Mainly contributed by [Confluent.io](https://www.confluent.io/) (a company
+founded by the creators of Kafka), Kafka Connect is an open source connector
+for connecting to various commonly used data sources, for instance, HDFS,
+JDBC or NoSQL databases (e.g. Cassandra, MongoDB, Elasticsearch).
+
+The Kafka Connect component that reads from data sources is called
+**Source Connector**, and the component that write to data source is called
+**Sink Connector**. Both connectors make use of Kafka Connect API, which is
+much handier than the Kafka Producer API and Kafka Consumer API.
+
+<div class="Image__Medium">
+  <img
+    src="/blogs/2019-02-08-start-kafka/kafka-connect.png"
+    alt="“Same same but different”, Kafka Connect makes stream handling easier."
+  />
+  <figcaption>
+    “Same same but different”, Kafka Connect makes stream handling easier.
+  </figcaption>
+</div>
+
+Hence, using Kafka Connect over Producer and Consumer is recommended,
+unless there are no official connectors for your data source (e.g. RabbitMQ,
+InfluxDB).
+
+### Kafka Stream
+
+Now with our data sources and sinks ready, we introduces the final
+component in Kafka. Kafka Stream is the component that allow us to filter,
+transform, and aggregate the data from all the data streams.
+
+There are many streaming processing operations available in the Kafka Stream
+APIs, including mapping, reducing, filtering, and window aggregation.
+It is also possible to use other frameworks to process Kafka data,
+including [Apache Spark](https://spark.apache.org/docs/2.2.0/streaming-kafka-integration.html),
+[Apache Flink](https://ci.apache.org/projects/flink/flink-docs-release-1.13/docs/connectors/datastream/kafka/),
+[Apache Beam](https://beam.apache.org/blog/review-input-streaming-connectors/),
+or even [AWS Lambda](https://aws.amazon.com/lambda/).
+
+Still, if you are looking for more details,
+you can always refer to these resources:
+
+- [Apache Kafka Official Documentation (of course)](https://kafka.apache.org/intro)
+
+- [Kafka concepts and common patterns @ beyondthelines](https://www.beyondthelines.net/computing/kafka-patterns/)
+
+---
+
+## Local Setup
+
+In this section, I will go over the steps to setup a Kafka cluster locally.
+All the sample codes are available in this repository:
+
+<div class="Image__Medium">
+  <Git id="https://github.com/kavimaluskam/kafka-starter" />
+  <figcaption>Gist video</figcaption>
+</div>
+
+### Local cluster architecture
+
+The local cluster architecture is defined in
+the file `docker/docker-compose.yml`, which is as follows:
+
+<div class="Image__Medium">
+  <img
+    src="/blogs/2019-02-08-start-kafka/local-kafka-docker.png"
+    alt="Components of the local Kafka Cluster"
+  />
+  <figcaption>Components of the local Kafka Cluster</figcaption>
+</div>
+
+- **kafka1**, **kafka2** serve as two separate broker nodes.
+  With the help of Apache Zookeeper, having two nodes provides us
+  higher availability via redundancy;
+
+- **schema_registry** serves as the sole schema server,
+  managing the schema (to be explained below) of all Kafka topics;
+
+- **kafdrop**, schema_registry_ui are the optional web UI for the
+  Kafka cluster and the schema registry server respectively;
+
+- **postgres** represents the external databases containing
+  the application data, which in this demo, the mock data;
+
+- **connect-shell** is the Kafka Connect App for us
+  to interact through in the terminal;
+
+### Step 1: Starting the service
+
+To start with, please make sure you have both Docker and Docker Compose
+already installed on your machine. Let’s clone the repository and
+enter our project directory:
+
+```shell
+cd ~
+git clone https://github.com/kavimaluskam/kafka-starter
+cd kafka-starter
+```
+
+Start services by executing the command `make up`
+and services are expected to be running:
+
+```shell
+make up     # remember, you need to have docker installed
+docker ps
+```
+
+<div class="Image__Medium">
+  <img src="/blogs/2019-02-08-start-kafka/docker-ps.png" alt="docker-ps" />
+  <figcaption>
+    Output from the command “docker ps” — you can see the Kafka cluster is now
+    ready.
+  </figcaption>
+</div>
+
+### Step 2: Basic Topic CRUD
+
+After the cluster’s ready, we can now read and write to Kafka topics.
+Let’s warm up with Kafka Topic CRUD in the command line interface.
+
+```shell
+# Enter Kafka Shell Client
+make kafka-shell
+
+# Assign testing topic name in variable
+TOPIC=test
+
+# Describe all topic
+kafka-topics \
+    --describe \
+    --zookeeper $ZK
+
+# Create topic
+kafka-topics \
+    --create \
+    --topic $TOPIC \
+    --partitions 4 \
+    --zookeeper $ZK \
+    --replication-factor 2
+
+# Describe partitions, replication, leader brokers for selected topic
+kafka-topics \
+    --describe \
+    --zookeeper $ZK \
+    --topic $TOPIC
+
+# Count the number of messages inside a topic
+kafka-run-class kafka.tools.GetOffsetShell \
+    --broker-list=$BROKERS \
+    --topic $TOPIC \
+    --time -1
+
+# Update retention policy of a topic
+# "-1" means forever
+kafka-configs \
+    --zookeeper $ZK \
+    --alter \
+    --entity-type topics \
+    --entity-name $TOPIC \
+    --add-config retention.ms=-1
+
+kafka-configs \
+    --zookeeper $ZK \
+    --alter \
+    --entity-type topics \
+    --entity-name $TOPIC \
+    --add-config retention.bytes=-1
+
+# Delete topics
+kafka-topics \
+    --delete \
+    --topic $TOPIC \
+    --zookeeper $ZK
+
+# Exit Docker when CRUD is done
+exit
+```
+
+### Step 3: Starting a Producer and Consumer in Console
+
+Using the Kafka Shell Client, we can instantiate a producer / a consumer
+application within the terminal. Opening two terminal shells,
+and type each of the commands in each separate shell:
+
+```shell
+# Enter Kafka Shell Client
+make kafka-shell
+
+# Assign topic name in variable
+TOPIC=test
+
+# Producer for console text input
+kafka-console-producer --topic=$TOPIC --broker-list=$BROKERS
+
+###############################################
+# You will then enter console input mode,     #
+# each newline will emit a message to Kafka.  #
+#                                             #
+# Ctrl + C to exit when input is done.        #
+###############################################
+
+# Exit Docker when console producer is done
+exit
+```
+
+<figcaption>Starting a producer with Kafka Shell.</figcaption>
+
+```shell
+# Enter Kafka Shell Client
+make kafka-shell
+
+# Assign topic name in variable
+TOPIC=test
+
+# Consumer for console text output, no stream offset
+kafka-console-consumer --topic=$TOPIC --bootstrap-server=$BROKERS --from-beginning
+
+# Console consumer will print each records in the topic
+# ...
+# ...
+# ...
+
+# Exit Docker when console consumer is done
+exit
+```
+
+<figcaption>Starting a consumer with Kafka Shell.</figcaption>
+
+### Step 4: Kafka Connect (with mock database)
+
+For real-time usage, source data would be coming from different external
+sources, rather than manual input from the terminal. To automate the
+data connection to data sources, as a proof of concept, we make use of
+Kafka Connect to connect to a mock PostgresSQL database.
+
+1. Mock data is ready in the initialization script. Confirm the data by:
+   `$ make db-preview`
+
+1. Execute Kafka Connect to the PostgresSQL database, with
+   [Kafka Connect docker image](https://hub.docker.com/r/confluentinc/cp-kafka-connect/tags)
+   provided by Confluent. We can use Kafka Connect on a local
+   standalone cluster with the following command:
+
+   ```shell
+   connect-standalone worker1.properties connector1.properties [connector2.properties...]
+   ```
+
+- **worker1.properties** is a configuration file for the
+  **Kafka Connect Worker**, which contains settings such as the
+  Kafka cluster location, serialization format, etc.
+
+- **connector{1/2}.properties** is a configuration file for
+  **Kafka Connection**, the data sources to be connected
+  could be a data source or a data sink.
+
+In the `connect/dev/` directory, some predefined configuration
+files are already provided. Hence, we can use the following
+command to start a Kafka Connect with JSON serialization:
+
+```shell
+# Enter Kafka Connect Shell Client
+make connect-shell
+
+# Kafka Connect with connect-standalone setting, connecting via postgres
+connect-standalone dev/connect-standalone.properties dev/source-postgres-incremental.properties
+
+# Expected console-consumer output from topic: app-users
+# {
+#   "schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"id"},{"type":"string","optional":false,"field":"first_name"},{"type":"string","optional":false,"field":"last_name"},{"type":"string","optional":false,"field":"email"}],"optional":false,"name":"users"},
+#   "payload":{"id":101,"first_name":"Cass","last_name":"Truss","email":"ctruss0@salon.com"}
+# }
+# {
+#   "schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"id"},{"type":"string","optional":false,"field":"first_name"},{"type":"string","optional":false,"field":"last_name"},{"type":"string","optional":false,"field":"email"}],"optional":false,"name":"users"},
+#   "payload":{"id":102,"first_name":"Joete","last_name":"Scowcroft","email":"jscowcroft1@gizmodo.com"}
+# }
+# {
+#   "schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"id"},{"type":"string","optional":false,"field":"first_name"},{"type":"string","optional":false,"field":"last_name"},{"type":"string","optional":false,"field":"email"}],"optional":false,"name":"users"},
+#   "payload":{"id":103,"first_name":"Celine","last_name":"Wortley","email":"cwortley2@bizjournals.com"}
+# }
+# {
+#   "schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"id"},{"type":"string","optional":false,"field":"first_name"},{"type":"string","optional":false,"field":"last_name"},{"type":"string","optional":false,"field":"email"}],"optional":false,"name":"users"},
+#   "payload":{"id":104,"first_name":"Othilia","last_name":"Gumme","email":"ogumme3@issuu.com"}
+# }
+# {
+#   "schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"id"},{"type":"string","optional":false,"field":"first_name"},{"type":"string","optional":false,"field":"last_name"},{"type":"string","optional":false,"field":"email"}],"optional":false,"name":"users"},
+#   "payload":{"id":105,"first_name":"Maynord","last_name":"Buttrick","email":"mbuttrick4@mashable.com"}
+# }
+# ...
+
+# Exit Docker when Kafka Connect is done
+(Ctrl-C)
+exit
+```
+
+Now, Kafka Connect should be able to poll records in a database with
+detected schemas and perform JSON serialization. As illustrated above,
+we can see that the messages produced are of the following format,
+in which `schema` describes the message format and `payload` contains
+the actual message content:
+
+```json
+[
+  {
+    "schema":
+      {"type":"struct","fields":[{"type":"int32",...]...},
+    "payload":
+      {"id":101,"first_name":...}
+  },
+  ...
+]
+```
+
+### Step 5: Kafka Connect with Schema Registry (and Apache Avro)
+
+You may notice that the same schema object is actually embedded in every
+single messages, which lead to a huge waste of storage space.
+Moreover, there is no schema validation upon the arrival of each message.
+
+To address the above problem, we will need some more components —
+enters **Schema Registry** and **Apache Avro**. Avro serialization
+and schema registry pair is not a must for Kafka database connection,
+but is highly recommended.
+
+Apache Avro is a standard data serialization system.
+All the Avro schema are stored in a metadata server with
+versioning called Schema Registry.
+
+Let’s try Kafka Connect with Avro serialization:
+
+```shell
+# 0. Delete the existing topics: app-users, app-movies
+make kafka-shell
+
+kafka-topics --delete --topic app-users --zookeeper $ZK
+kafka-topics --delete --topic app-movies --zookeeper $ZK
+
+kafka-topics --create --topic app-users --partitions 2 --zookeeper $ZK --replication-factor 2
+kafka-topics --create --topic app-movies --partitions 2 --zookeeper $ZK --replication-factor 2
+
+exit
+
+# 1. Kafka Connect with Avro serialization
+# Enter Kafka Connect Shell Client
+make connect-shell
+
+# Kafka Connect with avro-standalone setting, connecting via postgres
+connect-standalone dev/connect-avro-standalone.properties dev/source-postgres-incremental.properties
+
+# 2. Console consumer with Avro deserialization
+# Enter Kafka Avro Shell Client
+make avro-shell
+
+# Console Consumer with Avro deserialization
+TOPIC=app-users
+
+kafka-avro-console-consumer --bootstrap-server $BROKERS \
+ --topic $TOPIC \
+ --from-beginning \
+ --property print.key=true \
+ --property print.value=true \
+ --property schema.registry.url=$SCHEMA_REGISTRY \
+ --max-messages 20
+
+# Expected console-consumer output from topic: app-users
+# null {"id":101,"first_name":"Cass","last_name":"Truss","email":"ctruss0@salon.com"}
+# null {"id":102,"first_name":"Joete","last_name":"Scowcroft","email":"jscowcroft1@gizmodo.com"}
+# null {"id":103,"first_name":"Celine","last_name":"Wortley","email":"cwortley2@bizjournals.com"}
+# null {"id":104,"first_name":"Othilia","last_name":"Gumme","email":"ogumme3@issuu.com"}
+# null {"id":105,"first_name":"Maynord","last_name":"Buttrick","email":"mbuttrick4@mashable.com"}
+# null {"id":106,"first_name":"Kendall","last_name":"Yitzovitz","email":"kyitzovitz5@storify.com"}
+# null {"id":107,"first_name":"Tedi","last_name":"Danne","email":"tdanne6@earthlink.net"}
+# null {"id":108,"first_name":"Diena","last_name":"Knight","email":"dknight7@cbsnews.com"}
+# null {"id":109,"first_name":"Court","last_name":"Hensmans","email":"chensmans8@over-blog.com"}
+# null {"id":110,"first_name":"Lissi","last_name":"Andrea","email":"landrea9@gizmodo.com"}
+# ...
+
+# Exit Docker when Kafka Connect is done
+(Ctrl-C)
+exit
+```
+
+To verify if the new data schema is generated,
+let us access the registry schema server through its REST API:
+
+- To query the list of schemas, visit http://localhost:8081/subjects;
+
+- To query individual schema (example, app-users-value),
+  visit http://localhost:8081/subjects/app-users-value/versions/latest;
+
+```shell
+# Check list of available schemas
+curl http://localhost:8081/subjects
+
+# Expected output:
+# ["app-users-value", "app-movies-value"]
+
+# Check detail of app-users-value schema
+curl http://localhost:8081/subjects/app-users-value/versions/latest
+
+# Expected output:
+# {
+#   "subject": "app-users-value",
+#   "version": 1,
+#   "id": 2,
+#   "schema": "{\"type\":\"record\",\"name\":\"users\",\"fields\":[{\"name\":\"id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"email\",\"type\":\"string\"}],\"connect.name\":\"users\"}"
+# }
+```
+
+### Step 6: Kafka / Schema Registry UI
+
+Finally, to put the icing on the cake, we can visit two GUI interfaces
+to visualize the Kafka cluster and schema registry.
+
+[Kafdrop](https://github.com/HomeAdvisor/Kafdrop), which is a web interface
+for monitoring a Kafka cluster is available at http://localhost:9000.
+
+<div class="Image__Medium">
+  <img src="/blogs/2019-02-08-start-kafka/kafdrop.png" alt="kafdrop" />
+  <figcaption>
+    Kafdrop Interface, showing the status of the Kafka cluster.
+  </figcaption>
+</div>
+
+[Schema Registry UI](https://github.com/lensesio/schema-registry-ui),
+a web interface for the schema registry, is available at http://localhost:8082.
+
+<div class="Image__Medium">
+  <img
+    src="/blogs/2019-02-08-start-kafka/schema-registry-ui.png"
+    alt="schema-registry-ui"
+  />
+  <figcaption>
+    Schema Registry UI, showing the details of available schemas.
+  </figcaption>
+</div>
+
+### Job done so far
+
+1. We have deployed the Kafka clusters as Docker containers;
+
+1. We have performed CRUD on Kafka topics;
+
+1. We have started a Kafka producer-consumer setup;
+
+1. We have connected a PostgresSQL database using Kafka Connect;
+
+1. We have added the Schema Registry;
+
+1. We have visualized the setup using web-based interfaces,
+   namely Kafdrop and schema-registry-ui;
+
+A round of applause for our progress! So far so good,
+but it isn’t a complete demo if it’s just running on our local machine.
+Now, we will deploy the entire architecture to AWS!
+
+<div class="Image__Medium">
+  <img src="/blogs/2019-02-08-start-kafka/sean.jpeg" alt="sean bean" />
+  <figcaption>
+    Especially when we can sneak into our company's AWS account.
+  </figcaption>
+</div>
+
+---
+
+## Cluster Setup on AWS Managed Streaming for Kafka
+
+While AWS MSK is still in its early preview stage (as of January, 2019),
+we will deploy an Apache Kafka cluster with the following components:
+
+- Three broker nodes on AWS MSK,
+
+- PostgresSQL database,
+
+- Kafdrop, and
+
+- Kafka Connect running on [AWS ECS (Elastic Container Service)](https://aws.amazon.com/ecs/).
+
+### Prerequisites
+
+- A Linux / MacOS machine,
+
+- An AWS account, with root privilege,
+
+- Latest AWS CLI installed on your machine with pre-configured credentials (using aws configure),
+
+- A Docker Hub account for hosting the Kafka Connect image,
+
+- And again, clone https://github.com/kavimaluskam/kafka-starter 😺.
+
+### Step 1: Create a VPC with 6 subnets
+
+Before setting up any services, a VPC is required as a network interface.
+On top of that, we will need 6 subnets:
+3 pairs of public and private subnet in 3 available zones.
+
+In case you are not familiarize with AWS VPC and subnets,
+please follow this [official AWS tutorial](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create-public-private-vpc.html)
+to complete the setup. You may use the below suggested values for the
+required configuration:
+
+<div class="Image__Medium">
+  <img src="/blogs/2019-02-08-start-kafka/vpc.png" alt="vpc" />
+  <figcaption>Suggested parameter for creating VPC and subnets</figcaption>
+</div>
+
+<div class="Image__Medium">
+  <img
+    src="/blogs/2019-02-08-start-kafka/vpc-dashboard.png"
+    alt="vpc-dashboard"
+  />
+  <figcaption>
+    Created VPC and subnets can be viewed in the VPC dashboard
+  </figcaption>
+</div>
+
+### Step 2: Create a simple Kafka Cluster on AWS MSK
+
+After creating the VPC and and its subnets, we then create the AWS MSK cluster
+through the [MSK dashboard](https://aws.amazon.com/msk/).
+
+The AWS MSK cluster will be running in the private subnets of the newly
+created VPC. For the minimal, demonstration purpose, we have only 1 broker
+per availability zone (AZ, for short).
+
+Since AWS MSK is still in preview stage, we can only retrieve the created
+MSK cluster’s information via the AWS CLI but not MSK dashboard:
+
+```shell
+# Assign 1 public subnetID from above subnet setup
+SUBNET_ID=${subnetID}
+
+# List all kafka cluster for corrsponding region
+aws kafka list-clusters --region us-east-1
+
+# Expected output
+# {
+#   "ClusterInfoList": [
+#     {
+#       "EncryptionInfo": {...},
+#       "BrokerNodeGroupInfo": {
+#         "BrokerAZDistribution": "DEFAULT",
+#         "ClientSubnets": [...],
+#         "StorageInfo": {...},
+#         "SecurityGroups": [...],
+#         "InstanceType": "kafka.m5.large"
+#       },
+#       "ClusterName": "data-kafka",
+#       "CurrentBrokerSoftwareInfo": {...},
+#       "CreationTime": "YYYY-MM-DDTHH:MM:SS.SSZ",
+#       "NumberOfBrokerNodes": 3,
+#       "ZookeeperConnectString": "10.0.xxx.xxx:2181,10.0.xxx.xxx:2181,10.0.xxx.xxx:2181",
+#       "State": "ACTIVE",
+#       "CurrentVersion": "...",
+#       "ClusterArn": "arn:aws:kafka:us-east-1:xxxxxxx:cluster/data-kafka/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx-x",
+#       "EnhancedMonitoring": "..."
+#     }
+#   ]
+# }
+
+# Assign cluster arn from previous response
+ARN=${cluster-arn}
+
+# Get bootstrap brokers for selected cluster
+aws kafka get-bootstrap-brokers --cluster-arn $arn --region us-east-1
+
+# Expected output
+# {
+#   "BootstrapBrokerString": "10.0.xxx.xxx:9092,10.0.xxx.xxx:9092,10.0.xxx.xxx:9092"
+# }
+
+# Assign cluster brokers connection for selected cluster
+STG_BROKERS=${bootstrap-brokers-string}
+
+# Get zookeeper and other information for selected cluster
+aws kafka describe-cluster --cluster-arn $arn --region us-east-1
+STG_ZK=${zookeeper-server-string)
+```
+
+<figcaption>Retrieve brokers and zookeeper information to proceed</figcaption>
+
+### Step 3: Set up Kafka client and the mock database on AWS EC2 + AWS ECS
+
+Now, we have a Kafka cluster with three broker nodes managed by AWS MSK.
+Next, we are deploying the following components:
+
+- PostgresSQL database with mock data,
+
+- Kafdrop, and
+
+- An EC2 instance (namely _containers server_), for hosting the docker image.
+
+We will deploy the above components using [AWS CloudFormation](https://aws.amazon.com/cloudformation/).
+All the YAML file for this tutorial are created in `aws-setup`.
+Simply deploy the two services and containers server via CLI:
+
+```shell
+aws cloudformation create-stack \
+   --stack-name data-kafka-starter \
+   --template-body file://`pwd`/aws-setup/cloudformation.yml \
+   --parameters ParameterKey=BootstrapServer,ParameterValue=\"$STG_BROKERS\" ParameterKey=ZookeeperServer,ParameterValue=\"$STG_ZK\" ParameterKey=SubnetID,ParameterValue=\"$SUBNET_ID\" \
+   --region us-east-1
+```
+
+The deployment may take a few minutes.
+You can check the latest progress in the AWS CloudFormation Dashboard.
+
+<div class="Image__Medium">
+  <img src="/blogs/2019-02-08-start-kafka/cf1.png" alt="cf1" />
+  <figcaption>
+    CloudFormation dashboard shows deployment stack’s status and details
+  </figcaption>
+</div>
+
+<div class="Image__Medium">
+  <img src="/blogs/2019-02-08-start-kafka/cf2.png" alt="cf2" />
+  <figcaption>
+    CloudFormation dashboard also shows deployment progress and events
+  </figcaption>
+</div>
+
+When the deployment has completed, we then check the containers server
+instance created and copy the public IP (`containers_server_ip`).
+We shall successfully see the broker statistics via Kafdrop in
+http://<containers_server_ip>:9000.
+
+### Step 4: Deploy Kafka Connect Worker on AWS ECS
+
+Now, the environment is ready, and we can try out the data connection on the
+cluster by a Kafka Connect task. First, we wrap our Kafka Connect worker
+properties into a docker container using the script `connect/stg/build.sh`:
+
+```shell
+DOCKER_HUB=${your docker hub account}
+DOMAIN=${domain for the containers server created}
+
+sh connect/stg/build.sh -h $DOCKER_HUB -b $STG_BS -d $DOMAIN
+```
+
+Similar to what we did in Step 3, we deploy the Kafka Connect service to
+AWS ECS using AWS CloudFormation:
+
+```shell
+aws cloudformation create-stack \
+   --stack-name data-kafka-starter-connect \
+   --template-body file://`pwd`/aws-setup/connect-cloudformation.yml \
+   --parameters ParameterKey=ImageName,ParameterValue=\"$DOCKER_HUB/kafka-connect-demo\" \
+   --region us-east-1
+```
+
+We shall see created topics with messages via Kafdrop
+for the production environment.
+
+<div class="Image__Medium">
+  <img
+    src="/blogs/2019-02-08-start-kafka/kafdrop-result.png"
+    alt="kafdrop-result"
+  />
+  <figcaption>Finally, database records are saved in MSK cluster!</figcaption>
+</div>
+
+### Step 5: Clean up
+
+To clean up the demo setup, we remove the CloudFormation stacks via CLI
+(as the second stack is serving in the first stack, we suggest you to
+remove the second stack first):
+
+```shell
+aws cloudformation delete-stack --stack-name data-kafka-starter-connect
+aws cloudformation delete-stack --stack-name data-kafka-starter
+```
+
+## Wrapping up
+
+As in a simplified demonstration environment, we are not showcasing
+the best deployment practice. You are welcome to extend our example with:
+
+- Schema Registry integration,
+
+- Distributed Kafka Connect workers, etc
+
+As you can observe, it is not trivial to deploy a Kafka cluster on AWS
+despite the availability of AWS MSK. Yet, the deployment process should be
+more and more streamlined as such a new AWS product matures.
+
+Thanks for reading this long tutorial.
+Hope this gives you more understandings on Apache Kafka and guidelines for
+application setups. For any questions or thoughts,
+feel free to contact me/create issues
+@https://github.com/kavimaluskam/kafka-starter 😺!
+
+Thanks to Isaac Yiu @ HK01 and Mole Wong @ HK01.
