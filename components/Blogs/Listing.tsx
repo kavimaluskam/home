@@ -18,6 +18,7 @@ const BlogListing = ({ frontMatter }: { frontMatter: FrontMatter }) => {
       <Flex alignItems="baseline">
         {frontMatter.tags.map((tag) => (
           <Badge
+            key={tag}
             py="1"
             px="1"
             mr="2"
