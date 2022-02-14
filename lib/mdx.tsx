@@ -13,7 +13,7 @@ const estimateReadingTime = (text: string) => {
 };
 
 // BLOGS_PATH is useful when you want to get the path to a specific file
-export const BLOGS_PATH = path.join(process.cwd(), "blogs");
+export const BLOGS_PATH = path.join(process.cwd(), "public/blogs");
 
 // fetchBlogFilePaths gets the list of all mdx files
 // inside the BLOGS_PATH directory
