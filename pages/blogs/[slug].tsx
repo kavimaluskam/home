@@ -1,4 +1,7 @@
-import { Box, Img, Link } from "@chakra-ui/react";
+import { Box, Button, Img, Link } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+
+import NextLink from "next/link";
 
 import Layout from "../../components/Layout";
 import {
@@ -33,7 +36,18 @@ const Blog = ({
   return (
     <Layout>
       <>
-        <Box maxW="600px" mx="auto" mb="4">
+        <Box mb="4">
+          <NextLink href="/blogs">
+            <Button
+              leftIcon={<ArrowBackIcon />}
+              variant="ghost"
+              color="gray.500"
+            >
+              Blogs
+            </Button>
+          </NextLink>
+        </Box>
+        <Box mb="4">
           <Box fontSize="3xl" fontWeight="semibold" mb="2">
             {frontMatter.title}
           </Box>
