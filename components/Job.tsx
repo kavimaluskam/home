@@ -11,8 +11,8 @@ const Job = () => {
         alt={siteMetadata.job.company}
         src={siteMetadata.job.avatar}
       />
-      {siteMetadata.job.descriptions.map((description) => (
-        <Text>{description}</Text>
+      {siteMetadata.job.descriptions.map((description, i) => (
+        <Text key={i}>{description}</Text>
       ))}
     </Stack>
   );

@@ -11,8 +11,10 @@ const Bio = () => {
       />
       <Stack spacing={2}>
         <Heading fontSize="2xl">{siteMetadata.bio.headline}</Heading>
-        {siteMetadata.bio.descriptions.map((description) => (
-          <Text fontSize="sm">{description}</Text>
+        {siteMetadata.bio.descriptions.map((description, i) => (
+          <Text fontSize="sm" key={i}>
+            {description}
+          </Text>
         ))}
       </Stack>
     </HStack>
