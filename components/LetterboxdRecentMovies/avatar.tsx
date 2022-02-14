@@ -1,4 +1,10 @@
-import { AspectRatio, Image, LinkOverlay, Tooltip } from "@chakra-ui/react";
+import {
+  AspectRatio,
+  Box,
+  Image,
+  LinkOverlay,
+  Tooltip,
+} from "@chakra-ui/react";
 import { RecentMovie } from "../../types/Letterboxd";
 
 interface AvatarProps {
@@ -38,12 +44,27 @@ const Avatar = ({
   >
     <Tooltip label={movie.name} bg="gray.900" color="gray.50">
       <LinkOverlay href={movie.href} isExternal={true}>
-        <Image
-          alt={movie.name}
-          src={movie.avatar}
-          borderRadius={2}
-          boxSize="100%"
-        />
+        {movie.avatar ? (
+          <Image
+            alt={movie.name}
+            src={movie.avatar}
+            borderRadius={2}
+            boxSize="100%"
+          />
+        ) : (
+          <Box
+            bg="black"
+            color="white"
+            height="100%"
+            borderRadius={1}
+            borderWidth="1px"
+            borderColor="gray"
+            p="4"
+            textAlign="center"
+          >
+            {movie.name.split(",").slice(0, -1).join(",")}
+          </Box>
+        )}
       </LinkOverlay>
     </Tooltip>
   </AspectRatio>
