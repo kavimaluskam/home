@@ -19,7 +19,7 @@ const Index = ({ blogs }: { blogs: Array<Blog> }) => {
   return (
     <Layout>
       <>
-        <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+        <Box w="100%" d="inline-block" p={3}>
           <Bio />
         </Box>
 
