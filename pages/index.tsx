@@ -12,7 +12,7 @@ import LetterboxdRecentMovies from "../components/LetterboxdRecentMovies";
 import SpotifyTopArtists from "../components/SpotifyTopArtists";
 import OkuclubBooks from "../components/OkuclubBooks";
 
-import { fetchBlogFilePaths, fetchBlogByPath } from "../lib/mdx";
+import { fetchBlogSlugs, fetchBlogBySlug } from "../lib/mdx";
 import { getReadingBooks } from "../lib/Okuclub";
 import { getRecentMovies } from "../lib/Letterboxd";
 import { getTopArtists } from "../lib/Spotify";
@@ -69,7 +69,7 @@ const Index = ({
 export default Index;
 
 export const getStaticProps = async () => {
-  const blogs = fetchBlogFilePaths().map(fetchBlogByPath);
+  const blogs = fetchBlogSlugs().map(fetchBlogBySlug);
 
   const [readingBooks, recentMovies, topArtists] = await Promise.all([
     getReadingBooks(),

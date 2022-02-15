@@ -20,8 +20,8 @@ import {
 
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import {
-  fetchBlogByPath,
-  fetchBlogFilePaths,
+  fetchBlogBySlug,
+  fetchBlogSlugs,
   serializeContent,
 } from "../../lib/mdx";
 import { FrontMatter } from "../../types/mdx";
@@ -100,7 +100,7 @@ export const getStaticProps = async ({
 }: {
   params: { slug: string };
 }) => {
-  const blog = fetchBlogByPath(`${slug}.mdx`);
+  const blog = fetchBlogBySlug(slug);
   const mdxSource = await serializeContent(blog.content);
 
   return {
@@ -112,7 +112,7 @@ export const getStaticProps = async ({
 };
 
 export const getStaticPaths = async () => {
-  const paths = fetchBlogFilePaths()
+  const paths = fetchBlogSlugs()
     // Remove file extensions for page paths
     .map((path) => path.replace(/\.mdx?$/, ""))
     // Map the path into the static paths object required by Next.js

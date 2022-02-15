@@ -10,7 +10,7 @@ import NextLink from "next/link";
 import { BlogListing } from "../../components/Blogs/Listing";
 import Layout from "../../components/Layout";
 import { Blog } from "../../types/mdx";
-import { fetchBlogFilePaths, fetchBlogByPath } from "../../lib/mdx";
+import { fetchBlogSlugs, fetchBlogBySlug } from "../../lib/mdx";
 
 const Blogs = ({ blogs }: { blogs: Array<Blog> }) => {
   return (
@@ -42,7 +42,7 @@ const Blogs = ({ blogs }: { blogs: Array<Blog> }) => {
 export default Blogs;
 
 export const getStaticProps = () => {
-  const blogs = fetchBlogFilePaths().map(fetchBlogByPath);
+  const blogs = fetchBlogSlugs().map(fetchBlogBySlug);
 
   return { props: { blogs } };
 };
