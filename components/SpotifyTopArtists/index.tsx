@@ -1,7 +1,7 @@
 import { Box, Link, Text } from "@chakra-ui/react";
 import Avatar from "./avatar";
-import { useSpotifyTopArtists } from "../../hooks/useSpotifyTopArtists";
 import siteMetadata from "../../configs/siteMetadata";
+import { TopArtist } from "../../types/Spotify";
 
 const AVATAR_POSITION_ARRAY = [
   { left: "33%", top: "26%", width: "35%" },
@@ -13,9 +13,11 @@ const AVATAR_POSITION_ARRAY = [
   { left: "40%", top: "0%", width: "16%" },
 ];
 
-const SpotifyTopArtists = () => {
-  const topArtists = useSpotifyTopArtists();
-
+const SpotifyTopArtists = ({
+  topArtists,
+}: {
+  topArtists: Array<TopArtist>;
+}) => {
   return (
     <Box padding={5} bg="gray.200" borderRadius="lg" pos="relative">
       <Link href={siteMetadata.spotifyTopArtists.profile} isExternal={true}>
