@@ -13,5 +13,4 @@ export interface FrontMatter {
 export interface Blog {
   content: string;
   frontMatter: FrontMatter;
-  filePath: string;
 }
