@@ -1,7 +1,7 @@
 import { Box, Link, Text } from "@chakra-ui/react";
 import Avatar from "./avatar";
-import { useOkuclubBooks } from "../../hooks/useOkuclubBooks";
 import siteMetadata from "../../configs/siteMetadata";
+import { Book } from "../../types/Okuclub";
 
 const AVATAR_POSITION_ARRAY = [
   {
@@ -20,9 +20,7 @@ const AVATAR_POSITION_ARRAY = [
   { left: "2%", top: "5%", width: "44%", transform: "rotate(-5deg)" },
 ];
 
-const OkuclubBooks = () => {
-  const readingBooks = useOkuclubBooks();
-
+const OkuclubBooks = ({ readingBooks }: { readingBooks: Array<Book> }) => {
   return (
     <Box padding={5} bg="black" borderRadius="lg" pos="relative">
       <Link href={siteMetadata.okuclubBooks.profile} isExternal={true}>
