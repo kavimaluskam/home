@@ -3,7 +3,9 @@ const config = {
     name: "kavimaluskam",
     headline: "Hey, I'm Alex Kam 👋",
     avatar: "/avatar.jpeg",
-    descriptions: ["Data engineer. Web3, Gym, Manga, Music. From 🇭🇰"],
+    descriptions: [
+      "Data engineer. Interested in general Techs, Web3, Gym, Manga, Music. From 🇭🇰",
+    ],
   },
   job: {
     company: "SoundCloud",

@@ -4,7 +4,6 @@ import { Box } from "@chakra-ui/react";
 
 import Masonry from "react-masonry-component";
 
-import Layout from "../components/Layout";
 import Bio from "../components/Bio";
 import Job from "../components/Job";
 import PreviewWidget from "../components/Blogs/PreviewWidget";
@@ -34,35 +33,33 @@ const Index = ({
   topArtists: Array<TopArtist>;
 }) => {
   return (
-    <Layout>
-      <>
-        <Box w="100%" d="inline-block" p={3}>
-          <Bio />
+    <>
+      <Box w="100%" d="inline-block" p={3}>
+        <Bio />
+      </Box>
+
+      <Masonry>
+        <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+          <Job />
         </Box>
 
-        <Masonry>
-          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
-            <Job />
-          </Box>
+        <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+          <PreviewWidget blogs={blogs} />
+        </Box>
 
-          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
-            <PreviewWidget blogs={blogs} />
-          </Box>
+        <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+          <LetterboxdRecentMovies recentMovies={recentMovies} />
+        </Box>
 
-          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
-            <LetterboxdRecentMovies recentMovies={recentMovies} />
-          </Box>
+        <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+          <SpotifyTopArtists topArtists={topArtists} />
+        </Box>
 
-          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
-            <SpotifyTopArtists topArtists={topArtists} />
-          </Box>
-
-          <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
-            <OkuclubBooks readingBooks={readingBooks} />
-          </Box>
-        </Masonry>
-      </>
-    </Layout>
+        <Box w={{ sm: "100%", md: "50%" }} d="inline-block" p={3}>
+          <OkuclubBooks readingBooks={readingBooks} />
+        </Box>
+      </Masonry>
+    </>
   );
 };
 
