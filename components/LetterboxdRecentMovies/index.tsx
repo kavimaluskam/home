@@ -4,9 +4,23 @@ import siteMetadata from "../../configs/siteMetadata";
 import { RecentMovie } from "../../types/Letterboxd";
 
 const AVATAR_POSITION_ARRAY = [
-  { left: "28%", top: "0%", width: "44%", zIndex: 2 },
-  { left: "2%", bottom: "10%", width: "44%", transform: "rotate(-5deg)" },
-  { right: "2%", bottom: "3%", width: "44%", transform: "rotate(4deg)" },
+  { left: "33%", top: "30%", width: "33%", zIndex: 2 },
+  {
+    left: "9%",
+    top: "34%",
+    width: "33%",
+    transform: "rotate(-5deg)",
+    zIndex: 1,
+  },
+  {
+    right: "9%",
+    top: "37%",
+    width: "33%",
+    transform: "rotate(4deg)",
+    zIndex: 1,
+  },
+  { left: "17%", top: "1%", width: "33%", transform: "rotate(-3deg)" },
+  { right: "19%", top: "5%", width: "33%", transform: "rotate(2deg)" },
 ];
 
 const LetterboxdRecentMovies = ({
