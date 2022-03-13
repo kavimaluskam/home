@@ -26,7 +26,7 @@ const parseRssToRecentMovies = async (xml: string): Promise<RecentMovie[]> => {
     a["letterboxd:watchedDate"][0] >= b["letterboxd:watchedDate"][0] ? -1 : 1
   );
 
-  const recentMovieList = movieList.slice(0, 3).map((movie: Movie) => {
+  const recentMovieList = movieList.slice(0, 5).map((movie: Movie) => {
     const descriptionSrc = movie.description[0].split("src=");
     return {
       name: movie.title[0],
