@@ -41,7 +41,7 @@ const LetterboxdRecentMovies = ({
 
       <Box padding={5} pos="relative" height="0" pb="75%">
         {recentMovies.map((movie, index) => {
-          const { left, right, top, bottom, width, zIndex, transform } =
+          const { left, right, top, width, zIndex, transform } =
             AVATAR_POSITION_ARRAY[index];
 
           return (
@@ -51,7 +51,6 @@ const LetterboxdRecentMovies = ({
               left={left}
               right={right}
               top={top}
-              bottom={bottom}
               width={width}
               zIndex={zIndex}
               transform={transform}
