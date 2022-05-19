@@ -1,4 +1,4 @@
-import { Box, Button, Image, LightMode, Link, Text } from "@chakra-ui/react";
+import { Box, Image, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { Blog } from "../../types/mdx";
 
@@ -9,9 +9,11 @@ const PreviewWidget = ({ blogs }: { blogs: Array<Blog> }) => {
   const { frontMatter } = latestBlog;
   return (
     <Box padding={5} bg="black" borderRadius="lg" pos="relative">
-      <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
-        {siteMetadata.blogs.headline}
-      </Text>
+      <Link href={`/blogs`}>
+        <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
+          {siteMetadata.blogs.headline}
+        </Text>
+      </Link>
       <Box p="2" mx="2">
         <NextLink href={`/blogs/${frontMatter.slug}`} passHref>
           <Link _hover={{ color: "orange" }}>
@@ -34,13 +36,6 @@ const PreviewWidget = ({ blogs }: { blogs: Array<Blog> }) => {
             </Box>
           </Link>
         </NextLink>
-        <LightMode>
-          <NextLink href={`/blogs`} passHref>
-            <Button w="100%" mt="3" colorScheme="orange">
-              {siteMetadata.blogs.blogsButton}
-            </Button>
-          </NextLink>
-        </LightMode>
       </Box>
     </Box>
   );
