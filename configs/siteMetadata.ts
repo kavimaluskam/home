@@ -3,6 +3,7 @@ const config = {
     name: "kavimaluskam",
     headline: "Hey, I'm Alex (@kavimaluskam) 👋",
     avatar: "/avatar.jpeg",
+    twitter: "https://twitter.com/kavimaluskam",
     descriptions: [
       "Data engineer. Interested in Techs, Web3, Gym, Manga, Music. From 🇭🇰",
     ],
