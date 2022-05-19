@@ -1,10 +1,10 @@
 const config = {
   bio: {
     name: "kavimaluskam",
-    headline: "Hey, I'm Alex Kam 👋",
+    headline: "Hey, I'm Alex (@kavimaluskam) 👋",
     avatar: "/avatar.jpeg",
     descriptions: [
-      "Data engineer. Interested in general Techs, Web3, Gym, Manga, Music. From 🇭🇰",
+      "Data engineer. Interested in Techs, Web3, Gym, Manga, Music. From 🇭🇰",
     ],
   },
   job: {

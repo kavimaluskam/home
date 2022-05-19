@@ -10,7 +10,7 @@ const Bio = () => {
         src={siteMetadata.bio.avatar}
       />
       <Stack spacing={2}>
-        <Heading fontSize="2xl">{siteMetadata.bio.headline}</Heading>
+        <Heading fontSize="xl">{siteMetadata.bio.headline}</Heading>
         {siteMetadata.bio.descriptions.map((description, i) => (
           <Text fontSize="sm" key={i}>
             {description}
