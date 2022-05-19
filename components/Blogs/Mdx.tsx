@@ -4,10 +4,10 @@ import Highlight, { defaultProps } from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/vsDark";
 
 export const h2 = (props: any) => (
-  <Box mt="1" mb="4" fontSize="2xl" fontWeight="semibold" as="h2" {...props} />
+  <Box mt="4" mb="4" fontSize="2xl" fontWeight="semibold" as="h2" {...props} />
 );
 export const h3 = (props: any) => (
-  <Box mt="1" mb="4" fontSize="xl" fontWeight="semibold" as="h2" {...props} />
+  <Box mt="4" mb="4" fontSize="xl" fontWeight="semibold" as="h2" {...props} />
 );
 export const p = (props: any) => <Box m="4px 0 16px 0" as="p" {...props} />;
 
@@ -47,7 +47,7 @@ export const pre = (props: any) => {
             className={className}
             style={style}
           >
-            {tokens.map((line, i) => (
+            {tokens.slice(0, -1).map((line, i) => (
               <Flex {...getLineProps({ line, key: i })}>
                 <Box as="span" opacity="0.5" pr="1rem">
                   {i + 1}
