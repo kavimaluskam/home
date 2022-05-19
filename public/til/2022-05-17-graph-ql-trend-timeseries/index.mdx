@@ -1,0 +1,62 @@
+---
+title: Timeseries data from Github GraphQL API
+date: "2022-05-17"
+tags:
+  - public data
+  - graphql
+---
+
+Github data is a popular measure of technology trend, especially in recent
+web3 study (e.g. [State of crypto report 2022 by a16z](https://a16zcrypto.com/state-of-crypto-report-a16z-2022/).)
+
+I have been previously asked in an interview for repository fork / dependency
+data, and I wrongly decided that we could only scrape latest data and maintain
+historical timeseries on our cache / storage, but later I found that Github
+does provide data history:
+
+### Repository Fork Timeseries:
+
+```graphql
+query {
+  repository(owner: "%s", name: "%s") {
+    forks(first: 100, privacy: PUBLIC) {
+      nodes {
+        name
+        owner {
+          login
+        }
+        createdAt # <-- Repository fork time
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}
+```
+
+### Repository Star Timeseries:
+
+```graphql
+query {
+  topic(name: "%s") {
+    stargazers(first: 100) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        starredAt # <-- Repository star time
+        node {
+          url
+        }
+      }
+    }
+  }
+}
+```
+
+### Reference:
+
+- [gh-trends: github trends showcase repository by nschloe](https://github.com/nschloe/gh-trends)
