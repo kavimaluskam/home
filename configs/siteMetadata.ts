@@ -17,8 +17,10 @@ const config = {
     ],
   },
   blogs: {
-    headline: "Recently Wrote 📝",
-    blogsButton: "Check out all posts 🔍",
+    headline: "Recently Wrote ✍🏻",
+  },
+  til: {
+    headline: "Today I Learned 📝",
   },
   letterboxdRecentMovies: {
     headline: "Lately watched 🍿",
