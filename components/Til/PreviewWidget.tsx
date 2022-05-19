@@ -6,16 +6,16 @@ import siteMetadata from "../../configs/siteMetadata";
 
 const TilPreviewWidget = ({ til }: { til: Array<Til> }) => {
   return (
-    <Box padding={5} bg="gray.200" borderRadius="lg" pos="relative">
+    <Box padding={5} bg="black" borderRadius="lg" pos="relative">
       <Link href={`/til`}>
-        <Text fontSize="md" color="gray.900" pb="5" textAlign="center">
+        <Text fontSize="md" color="gray.100" pb="5" textAlign="center">
           {siteMetadata.til.headline}
         </Text>
       </Link>
       <Box p="2" mx="2">
         {til.map(({ frontMatter }) => (
           <NextLink href={`/til/${frontMatter.slug}`} passHref>
-            <Link color="gray.900" _hover={{ color: "orange" }}>
+            <Link color="gray.100" _hover={{ color: "orange" }}>
               <Box mt="1" fontSize="md" as="h3">
                 {frontMatter.title}
                 <Box
