@@ -13,8 +13,8 @@ const TilPreviewWidget = ({ til }: { til: Array<Til> }) => {
         </Text>
       </Link>
       <Box p="2" mx="2">
-        {til.map(({ frontMatter }) => (
-          <NextLink href={`/til/${frontMatter.slug}`} passHref>
+        {til.map(({ frontMatter }, index) => (
+          <NextLink key={index} href={`/til/${frontMatter.slug}`} passHref>
             <Link color="gray.100" _hover={{ color: "orange" }}>
               <Box mt="1" fontSize="md" as="h3">
                 {frontMatter.title}
