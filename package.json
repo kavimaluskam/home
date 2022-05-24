@@ -26,6 +26,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-masonry-component": "^6.3.0",
+    "trim": "^0.0.3",
     "xml2js": "^0.4.23"
   },
   "scripts": {
